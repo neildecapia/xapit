@@ -162,6 +162,13 @@ module Xapit
         end
       end
     end
+
+    # Returns the keywords/terms (possibly stemmed) used in this search.
+    def searched_terms
+      query.terms.map do |term|
+        term[1..-1] if term =~ /^Z/
+      end.compact
+    end
     
     private
     

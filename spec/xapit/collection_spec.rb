@@ -171,6 +171,10 @@ describe Xapit::Collection do
       it "should inherit options in nested collection search" do
         Xapit::Collection.new(XapitMember, "world", :per_page => 3).search("zap").per_page.should == 3
       end
+
+      it "should list searched keywords" do
+        Xapit::Collection.new(XapitMember, "world bar").searched_terms.should == ["world", "bar"]
+      end
     end
   end
 end

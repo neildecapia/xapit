@@ -45,6 +45,10 @@ module Xapit
       @count ||= matchset(:limit => Config.database.doccount).matches_estimated
     end
     
+    def terms
+      @xapian_query.terms.map &:term
+    end
+
     private
     
     def merge_query(operator, *args)
