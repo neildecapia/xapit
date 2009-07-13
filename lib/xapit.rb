@@ -41,9 +41,9 @@ module Xapit
   
   def self.serialize_value(value)
     if value.kind_of?(Date)
-      Xapian.sortable_serialise(value.to_time.to_i)
+      Xapian.sortable_serialise(value.to_time.to_f)
     elsif value.kind_of?(Time)
-      Xapian.sortable_serialise(value.to_i)
+      Xapian.sortable_serialise(value.to_f)
     elsif value.kind_of?(Numeric) || value.to_s =~ /^[0-9]+$/
       Xapian.sortable_serialise(value.to_f)
     else

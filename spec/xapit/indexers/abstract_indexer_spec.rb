@@ -72,7 +72,7 @@ describe Xapit::AbstractIndexer do
     @indexer.field_terms(member).should == ["Xcreated_on-#{member.created_on.to_time.to_i}"]
   end
   
-  it "should use sortable_serialze for numeric sortable" do
+  it "should use sortable_serialize for numeric sortable" do
     member = Object.new
     stub(member).age { 7.89 }
     @index.sortable(:age)
@@ -86,26 +86,43 @@ describe Xapit::AbstractIndexer do
     @indexer.values(member).should == [Xapian.sortable_serialise(1)]
   end
   
-  it "should add sortable_serialze value for numeric field" do
+  it "should add sortable_serialize value for numeric field" do
     member = Object.new
     stub(member).age { [1, 2] }
     @index.field(:age)
     @indexer.values(member).should == [Xapian.sortable_serialise(1)]
   end
   
-  it "should use sortable_serialze for date field" do
+  it "should use sortable_serialize for date field" do
     date = Date.today
     member = Object.new
     stub(member).age { date }
     @index.field(:age)
-    @indexer.values(member).should == [Xapian.sortable_serialise(date.to_time.to_i)]
+    @indexer.values(member).should == [Xapian.sortable_serialise(date.to_time.to_f)]
   end
   
-  it "should use sortable_serialze for time field" do
+  it "should use sortable_serialize for time field" do
     time = Time.now
     member = Object.new
     stub(member).age { time }
     @index.field(:age)
-    @indexer.values(member).should == [Xapian.sortable_serialise(time.to_i)]
+    @indexer.values(member).should == [Xapian.sortable_serialise(time.to_f)]
+  end
+
+  it "should serialize dates in the distant future" do
+    time = Time.at 2**32
+    date = Date.civil time.year, time.month, time.day
+    member = Object.new
+    stub(member).age { date }
+    @index.field(:age)
+    @indexer.values(member).should == [Xapian.sortable_serialise(date.to_time.to_f)]
+  end
+
+  it "should serialize times in the distant future" do
+    time = Time.at 2**32
+    member = Object.new
+    stub(member).age { time }
+    @index.field(:age)
+    @indexer.values(member).should == [Xapian.sortable_serialise(time.to_f)]
   end
 end
