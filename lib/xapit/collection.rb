@@ -156,10 +156,8 @@ module Xapit
     # All Xapit::Facet objects, even if they do not include options.
     # Usually you'll want to call Collection#facets
     def all_facets
-      @query_parser.classes.inject([]) do |facets, xapit_class|
-        facets += xapit_class.xapit_index_blueprint.facets.map do |facet_blueprint|
-          Facet.new(facet_blueprint, @query_parser.query, @query_parser.facet_identifiers)
-        end
+      @query_parser.classes.first.xapit_index_blueprint.facets.map do |facet_blueprint|
+        Facet.new(facet_blueprint, @query_parser.query, @query_parser.facet_identifiers)
       end
     end
 
