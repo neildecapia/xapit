@@ -58,18 +58,20 @@ describe Xapit::AbstractIndexer do
     doc.terms.map(&:term).sort.should == %w[term list].sort
   end
   
-  it "should convert time to integer before saving as field term" do
+  it "should convert time to float before saving as field term" do
     member = Object.new
-    stub(member).created_at { Time.now }
+    t = Time.now
+    stub(member).created_at { t }
     @index.field(:created_at)
-    @indexer.field_terms(member).should == ["Xcreated_at-#{member.created_at.to_i}"]
+    @indexer.field_terms(member).should == ["Xcreated_at-#{member.created_at.to_f}"]
   end
   
-  it "should convert date to time then integer before saving as field term" do
+  it "should convert date to time then float before saving as field term" do
     member = Object.new
-    stub(member).created_on { Date.today }
+    d = Date.today
+    stub(member).created_on { d }
     @index.field(:created_on)
-    @indexer.field_terms(member).should == ["Xcreated_on-#{member.created_on.to_time.to_i}"]
+    @indexer.field_terms(member).should == ["Xcreated_on-#{member.created_on.to_time.to_f}"]
   end
   
   it "should use sortable_serialize for numeric sortable" do

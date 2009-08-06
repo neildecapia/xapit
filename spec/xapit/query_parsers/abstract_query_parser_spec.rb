@@ -12,13 +12,13 @@ describe Xapit::AbstractQueryParser do
   it "should convert time into integer before placing in condition term" do
     time = Time.now
     parser = Xapit::AbstractQueryParser.new(:conditions => { :time => time })
-    parser.condition_terms.should == ["Xtime-#{time.to_i}"]
+    parser.condition_terms.should == ["Xtime-#{time.to_f}"]
   end
     
   it "should convert date into time then integer before placing in condition term" do
     date = Date.today
     parser = Xapit::AbstractQueryParser.new(:conditions => { :date => date })
-    parser.condition_terms.should == ["Xdate-#{date.to_time.to_i}"]
+    parser.condition_terms.should == ["Xdate-#{date.to_time.to_f}"]
   end
     
   it "should give spelling suggestion on full term" do
